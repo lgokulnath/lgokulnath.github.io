@@ -2,23 +2,26 @@
 <html>
     <head>
         <title>Mental Maths Quiz</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="landingPage">
-            Welcome to the Mental Math Quiz!! <br>
+        <div id="landingPage" align="center">
+            <h1> Welcome to the Mental Math Quiz!! </h1> <br>
             <input id="startQuiz" type="button" value="Start Quiz!">
         </div>
-        <div id="timerDisplay"></div> <br> <br>
-        <div id="questionText">
+        <div id="quizForm" align="center">
+            <div id="timerDisplay"></div> <br> <br>
+            <div id="questionText">
+                
+            </div>
+            <div id="answer">
+                
+                    <label>Answer: </label>
+                    <input type="text" id="answerText" name="answer"><br><br>
+                    <input id="submit" type="button" value="Submit" class="btnSubmit">
+                    <input id="endQuizbtn" type="button" value="End quiz" class="btnEnd">
             
-        </div>
-        <div id="answer">
-            
-                <label>Answer: </label>
-                <input type="text" id="answerText" name="answer"><br><br>
-                <input id="submit" type="button" value="Submit">
-                <input id="endQuizbtn" type="button" value="End quiz">
-          
+            </div>
         </div>
     </body>
     <script src="script.js"></script>

@@ -1,0 +1,28 @@
+body {
+    background-color: lightyellow;
+}
+
+#quizForm {
+    margin: auto;
+}
+
+#landingPage {
+    margin: auto;
+}
+
+
+.btnSubmit {
+    background-color: greenyellow;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+}
+
+.btnEnd {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+}
