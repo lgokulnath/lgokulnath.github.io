@@ -6,6 +6,7 @@ answerDiv = document.getElementById("answer");
 answerText = document.getElementById("answerText");
 
 var QUIZ_TIME = 60;
+var timerId = -1;
 
 // initialize the question when the webpage is loaded
 document.addEventListener("DOMContentLoaded", function() {
@@ -106,6 +107,7 @@ answerText.addEventListener("keydown", function (e) {
 
 function endQuiz() {
     window.alert("The quiz is over. Your final score is " + score.toString());
+    clearInterval(timerId);
     timeRemaining = QUIZ_TIME;
     startQuizButton.style.visibility = 'visible';
     startQuizButton.value = 'Retake Quiz';
@@ -132,7 +134,7 @@ function onSubmit() {
 }
 
 function timerInterval() {
-    setInterval(setAlert, 1000);
+    timerId = setInterval(setAlert, 1000);
 }
 
 function setAlert() {
