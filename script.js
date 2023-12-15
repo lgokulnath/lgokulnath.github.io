@@ -1,6 +1,7 @@
 startQuizButton = document.getElementById("startQuiz");
 questionText = document.getElementById("questionText");
 submitButton = document.getElementById("submit");
+endQuizButton = document.getElementById("endQuizbtn");
 timerText = document.getElementById("timerDisplay");
 answerDiv = document.getElementById("answer");
 answerText = document.getElementById("answerText");
@@ -107,7 +108,9 @@ answerText.addEventListener("keydown", function (e) {
 
 function endQuiz() {
     window.alert("The quiz is over. Your final score is " + score.toString());
+    console.log("Clearing timer...");
     clearInterval(timerId);
+    console.log("cleared timer id = " + timerId.toString());
     timeRemaining = QUIZ_TIME;
     startQuizButton.style.visibility = 'visible';
     startQuizButton.value = 'Retake Quiz';
@@ -150,6 +153,7 @@ function setAlert() {
 }
 
 submitButton.onclick = onSubmit;
+endQuizButton.onclick = endQuiz;
 
 
 
