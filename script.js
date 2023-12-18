@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
     questionText.style.visibility = 'hidden';
     answerDiv.style.visibility = 'hidden';
     timerText.style.visibility = 'hidden';
-  },  { once: true });
+  });
 
 startQuizButton.onclick = startQuiz;
 
@@ -38,7 +38,7 @@ function startQuiz() {
     score = 0;
     prevResult = -1;
     
-    initTimer();
+    updateTimerDisplay();
     genQuestion();
     timerInterval();
 
@@ -52,7 +52,7 @@ function startQuiz() {
 
 
 
-function initTimer() {
+function updateTimerDisplay() {
     console.log("init timer called");
     if (timeRemaining >= 0) {
         timerText.innerHTML = "<p>Time remaining: " + timeRemaining.toString() + "</p>";
@@ -149,7 +149,7 @@ function setAlert() {
         
         // TODO 
     }
-    initTimer();
+    updateTimerDisplay();
 }
 
 submitButton.onclick = onSubmit;
