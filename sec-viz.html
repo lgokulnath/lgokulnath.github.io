@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smallest Enclosing Circle Visualization</title>
+<style>
+  canvas {
+    border: 1px solid black;
+    width: 80%;
+    height: 90%;
+    /* width: 90vw;
+    height: 80vh; */
+    /* align-content: center; */
+  }
+#bruteForceSECRuntime {
+      background-color: #d3d3d3; /* Light gray background */
+      color: #888; /* Gray text color */
+    }
+    #randomizedSECRuntime {
+      background-color: #d3d3d3; /* Light gray background */
+      color: #888; /* Gray text color */
+    }
+</style>
+</head>
+<body>
+<center>
+<canvas id="canvas" ></canvas>
+<!-- </center> -->
+<div>
+    <label for="textBox">Enter No of Points (min 2):</label>
+    <input type="text" id="numPoints" name="textBox" value="20"> 
+    <input type="radio" id="vizTrue" name="viz" value="true">
+    <label for="trueOption">Visualize on</label>
+    <input type="radio" id="vizFalse" name="viz" value="false" checked>
+    <label for="falseOption">Visualize off</label>
+    <button onclick="generateRandomPoints()">Generate Random Points</button>
+    <button onclick="addManualPoints()">Select points manually</button>
+    <button onclick="genSEC()">Refresh SEC</button>
+    <button onclick="resetCanvas()">Reset all</button>
+</div>
+<br>
+<div>
+  <label for="textBox">Runtime of brute force SEC: </label>
+  <input type="text" value="0s" id="bruteForceSECRuntime" readonly> <br><br>
+  <label for="textBox">Runtime of randomized SEC: </label>
+  <input type="text" value="0s" id="randomizedSECRuntime" readonly> <br>
+</div>
+</center>
+</body>
+<script src="script.js"></script>
+</html>
+
