@@ -1,0 +1,1608 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"Arial Unicode MS";
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"Open Sans";}
+@font-face
+	{font-family:Comfortaa;}
+@font-face
+	{font-family:"Segoe UI Historic";
+	panose-1:2 11 5 2 4 2 4 2 2 3;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Arial",sans-serif;}
+h2
+	{margin-top:18.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Arial",sans-serif;
+	font-weight:normal;}
+h3
+	{margin-top:16.0pt;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Arial",sans-serif;
+	color:#434343;
+	font-weight:normal;}
+.MsoPapDefault
+	{line-height:115%;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-IN style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<h2 align=center style='text-align:center'><a name="_sn0ys3iva776"></a><a
+name="_41u1l6a0sx8f"></a><b><span lang=EN>MULTI-AGENT REINFORCEMENT LEARNING</span></b></h2>
+
+<h2><b><span lang=EN>Prerequisite</span></b></h2>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>We
+assume that the reader knows about single agent RL settings with topics
+covering MDP, bandit setting, Q learning, SARSA etc. </span></p>
+
+<h2><a name="_h6j15wwycgei"></a><b><span lang=EN>Introduction to MARL</span></b></h2>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>In
+this blog we will talk about multi agent reinforcement learning and some of the
+concepts associated with it.</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>So
+first we look at what is MARL, and how is it different from single agent
+setting, so MARL consist of an environment with which we interact and some
+goals like reward maximization and also agents (<b>MULTIPLE</b>),so the
+difference lies in the number of agents, One can argue that we can look at it
+as a single agent setting but the joint action space size will increase
+exponentially as the number of agent increases so we will find some algorithms
+to solve this problems.</span></p>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal><img width=391 height=301 src="EE675_Blog_files/image001.gif"
+align=left hspace=2 vspace=2></p>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<h2><a name="_dpyco6bpcb2"></a><span lang=EN>&nbsp;</span></h2>
+
+<h2><span lang=EN>&nbsp;</span></h2>
+
+<h2><span lang=EN>&nbsp;</span></h2>
+
+<h2><span lang=EN>&nbsp;</span></h2>
+
+<h2><b><span lang=EN>Applications of MARL</span></b></h2>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>It
+     has been extensively used in warehouse management where multiple robots
+     are deployed to work together.</span></li>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Multiple
+     board games can be learned using MARL as we can use multi agents setting
+     where each agent play for itself and exploit weakness of others, resulting
+     in the overall improvement for all the agents</span></li>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>In
+     trading also it can be used by the same principle as in board games to
+     improve each other to trade better.</span></li>
+</ol>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>We
+will move onto various classes of setting in multi agent reinforcement learning
+with increasing complexity in hierarchy.</span></p>
+
+<h2><a name="_2ft5mil9bp9l"></a><b><span lang=EN>Settings in MARL</span></b></h2>
+
+<h3 style='margin-left:36.0pt;text-indent:-18.0pt'><a name="_dwa56031vu91"></a><b><span
+lang=EN>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span></b><b><span
+lang=EN>Normal form games</span></b></h3>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Normal form games are equivalent to bandit setting in
+single agent RL with only 1 state.</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Def : It consists of :</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>a.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Finite
+set of agents I</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>b.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>For each
+agent i in I</span></p>
+
+<p class=MsoNormal style='margin-left:108.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Finite
+set of action A<sub>i</sub></span></p>
+
+<p class=MsoNormal style='margin-left:108.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Reward
+function R<sub>i </sub>with R<sub>i</sub>: A -&gt; R where A = A<sub>1</sub> ×
+... × A<sub>n</sub></span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>          Normal
+formal games can be classified on the basis of reward structure as:</span></p>
+
+<p class=MsoNormal style='margin-left:54.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>a.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Zero-sum
+game : The sum of agents' reward is always 0 for all joint action A. A game of
+rock paper scissors could be looked at as a zero sum game.</span>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=342 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=151 height=29 src="EE675_Blog_files/image002.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+<p class=MsoNormal style='margin-left:54.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>b.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Common
+reward game: All the agents receive the same reward.</span></p>
+
+<p class=MsoNormal style='margin-left:54.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>c.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>General-sum
+game : No constraints</span>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=394 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=76 height=29 src="EE675_Blog_files/image003.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+<p class=MsoNormal style='margin-left:54.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Normal
+form games can be extended to repeated normal form game by repeatedly playing
+the game, now our policy may depend on the history denoted by </span></p>
+
+<p class=MsoNormal style='margin-left:54.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>rest all remains the same.</span>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=382 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=125 height=29 src="EE675_Blog_files/image004.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+<h3><a name="_dm0qt2w8b6wj"></a><span lang=EN> 2. <b>Stochastic Games</b></span></h3>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Stochastic games are equivalent to MDP for the single
+RL setting, </span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Def : It consists of :</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>a.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Finite
+set of agents I = {1, ..., n}</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>b.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Finite
+set of states S, with subset of terminal states S’ </span><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8834;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> S</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>c.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>For each
+agent i </span><span lang=EN style='font-size:12.0pt;line-height:115%;
+font-family:"Cambria Math",serif'>&#8712;</span><span lang=EN style='font-size:
+12.0pt;line-height:115%'> I:</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>– Finite set of actions Ai</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>– Reward function Ri : S × A × S &#8594; R, where A =
+A1 × ... × An</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>d.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>State
+transition probability function T : S × A × S &#8594; [0, 1] such that</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8704;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'>s </span><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> S, a </span><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> A : &#8721;<sub>s&#8242;</sub></span><sub><span
+lang=EN style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span></sub><sub><span
+lang=EN style='font-size:12.0pt;line-height:115%'>S</span></sub><span lang=EN
+style='font-size:12.0pt;line-height:115%'>T (s, a, s&#8242;) = 1 </span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>e.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Initial
+state distribution &#956; : S &#8594; [0, 1] such that</span></p>
+
+<p class=MsoNormal style='margin-left:72.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>&#8721;<sub>s</sub></span><sub><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span></sub><sub><span
+lang=EN style='font-size:12.0pt;line-height:115%'>S</span></sub><span lang=EN
+style='font-size:12.0pt;line-height:115%'>&#956;(s) = 1 and </span><span
+lang=EN style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8704;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'>s </span><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> S’ : &#956;(s) = 0</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>          So
+the game starts in some state according to &#956;, and then we select our
+action based on</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>          policy
+&#960;<sub>i</sub>(a<sub>t</sub>i | h<sub>t</sub>) for the agent i where the
+history contains all the states and joint actions,     </span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>the property of history is known as full observability
+and then we transition according to  our transition probability function. Also
+we have markov property as in MDP i.e. </span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=539 height=42 id=image23.png src="EE675_Blog_files/image005.gif"></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>One of the examples of stochastic games could be a
+foraging game where multiple agents have to collect the apples but each agent
+has a skill level and to collect the apple the skill level of all the agents
+around an apple should be more than its level. And our task is to collect all
+the apples as fast as possible.</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN><img width=563
+height=297 id=image22.png src="EE675_Blog_files/image006.gif"></span></p>
+
+<h3 style='margin-left:36.0pt'><a name="_ruqfpqzry3w"></a><span lang=EN>3. <b>Partially
+observable stochastic game</b></span></h3>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>So it is almost the same as a stochastic game but the
+property of full observability does not hold and it is more close to the
+natural setting as in reality many a time agents do not have full information
+about the state and the action of other agents.</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Def: It contains all the elements of stochastic games
+and </span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>• Finite set of observations <i>O</i>i</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>• Observation function O<sub>i</sub> : A × S × <i>O</i><sub>i</sub></span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> &#8594; [0, 1] such that</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8704;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'>a </span><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> A, s </span><span lang=EN
+style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span
+lang=EN style='font-size:12.0pt;line-height:115%'> S : &#8721;<sub>oi</sub></span><sub><span
+lang=EN style='font-size:12.0pt;line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span></sub><i><sub><span
+lang=EN style='font-size:12.0pt;line-height:115%'>O</span></sub></i><sub><span
+lang=EN style='font-size:12.0pt;line-height:115%'>i</span></sub><span lang=EN
+style='font-size:12.0pt;line-height:115%'>O<sub>i</sub>(a, s, o<sub>i</sub>) =
+1</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>And now the history h<sub>t</sub>=(o<sub>1</sub>,o<sub>2</sub>,....o<sub>t</sub>)</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>So
+the whole picture over distinct setting can be presented as </span></p>
+
+<p class=MsoNormal><span lang=EN><img width=418 height=243 id=image27.png
+src="EE675_Blog_files/image007.gif"></span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>also
+we can model communication by extending our existing action space with the help
+of message space</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=141 height=37 src="EE675_Blog_files/image008.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>where
+X<sub>i</sub> is the old action set and M<sub>i</sub> is the message set</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>And we can also model corruption of messages or the
+communication error using POSG. Also remember that agents themselves don’t
+understand the meaning of the messages and have to learn it through the
+process.</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Now that we have seen the different types of setting
+in reinforcement learning, we will move to some of the equilibrium concepts
+where we want our policy to converge.</span></p>
+
+<h2><a name="_q19fq1sd5m60"></a><b><span lang=EN>Definition for different types
+of equilibrium</span></b></h2>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>(U
+is the expected discounted reward)</span></p>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Best
+     Response:</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'><img width=337 height=27
+src="EE675_Blog_files/image009.gif"><img width=320 height=49
+src="EE675_Blog_files/image010.gif"></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>So the best response as the name suggest is the best
+an agent i can do by keeping the policy of other agents fixed.</span></p>
+
+<ol style='margin-top:0cm' start=2 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Minmax
+     solution: In a zero-sum game with two agents, a joint policy &#960; =
+     (&#960;i, &#960;j) is a minimax solution if</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'><img width=194 height=117
+src="EE675_Blog_files/image011.gif"></span></p>
+
+<ol style='margin-top:0cm' start=3 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Nash
+     Equilibrium</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>In
+a general-sum game with n agents, a joint policy &#960; = (&#960;1, ...,
+&#960;n) is a Nash equilibrium if</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=211 height=41 id=image19.png src="EE675_Blog_files/image012.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>So
+Nash equilibrium says that we can’t improve our expected reward unilaterally by
+just changing our policy.</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>Consider
+the following example of the game</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=157 height=93 src="EE675_Blog_files/image013.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>So
+here the policy to perform A,A is a Nash equilibrium as if let's say agent 2
+decided to change its policy to improve it will have to play B with some
+probability and that will reduce the overall reward. Similarly B,B is a nash
+equilibrium and also if both agents decided to play both A and B with half
+probability then also it is a nash equilibrium. So there are multiple possible
+nash equilibriums.</span></p>
+
+<ol style='margin-top:0cm' start=4 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&#1108;-Nash
+     Equilibrium</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Now we can loosen the constraint imposed by the nash
+equilibrium by using &#1108;-Nash Equilibrium which says that </span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>In
+a general-sum game with n agents, a joint policy &#960; = (&#960;1, ...,
+&#960;n) is a &#1108;-Nash equilibrium if</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=225 height=43 src="EE675_Blog_files/image014.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>So
+we are saying that an agent can’t improve its own expected reward by more than
+epsilon by changing its own policy. There is usually no relation between a nash
+equilibrium and &#1108;-Nash Equilibrium, consider the following example</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=205 height=103 src="EE675_Blog_files/image015.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>Here
+the action A,C is a nash equilibrium but the action B,D is an e-Nash
+equilibrium with e=1 as the best improvement agent 2 can do is by playing C and
+increase its award by epsilon.</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<ol style='margin-top:0cm' start=5 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Correlated
+     Equilibrium</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Till now we have assumed probabilistically independent
+policy in nash equilibrium, correlated equilibrium will generalize the nash
+equilibrium by allowing the correlation between policy.</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Definition 8 (Correlated equilibrium) In a general-sum
+normal-form game</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>with n agents, let &#960;c(a) be a joint policy that
+assigns probabilities to joint</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>actions a </span><span lang=EN style='font-size:12.0pt;
+line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span lang=EN
+style='font-size:12.0pt;line-height:115%'> A. Then, &#960;c is a correlated
+equilibrium if for every agent i </span><span lang=EN style='font-size:12.0pt;
+line-height:115%;font-family:"Cambria Math",serif'>&#8712;</span><span lang=EN
+style='font-size:12.0pt;line-height:115%'> I and</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>every action modifier &#958;i : Ai &#8594; Ai:</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'><img width=375 height=60
+src="EE675_Blog_files/image016.gif"></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>No agent can deviate from its recommended action to
+increase its expected reward.</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Consider the following example</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'><img width=235 height=119 id=image18.png
+src="EE675_Blog_files/image017.gif"><img width=265 height=75 id=image20.png
+src="EE675_Blog_files/image018.gif"></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>here the first 3 policies are the nash equilibrium and
+now consider the following policy</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'><img width=238 height=60
+src="EE675_Blog_files/image019.gif"></span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>          So
+if we assume that A got the recommended action as L then its expected reward is
+6/2+2/2 = 4, but if it tries to change it to B then it will be reduced to 3.5
+and similarly other cases followed so hence its correlated equilibrium.</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<ol style='margin-top:0cm' start=6 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Pareto
+     Optimality</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Now as we have seen that there are multiple possible
+equillibrium so to put more constraint on the equilibrium we defines this,</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>Def:
+A joint policy &#960; is Pareto- dominated by another joint policy
+&#960;&#8242; if</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'><img width=389 height=45
+src="EE675_Blog_files/image020.gif"></span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>So a policy is pareto efficient if it is not dominated
+by other policies.</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<ol style='margin-top:0cm' start=7 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>No-regret</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=252 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=289 height=59 src="EE675_Blog_files/image021.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>An agent is said to have no-regret if its average
+regret in the limit of z &#8594; &#8734; is at most zero. No-regret
+necessitates that every agent in the game have no-regret as a solution notion.</span>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=295 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=258 height=53 src="EE675_Blog_files/image022.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Now we have seen various solution concepts and now we
+will finally move onto some of the algorithms for solving MARL.</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>We will look into single agent RL reduction problems
+and directly apply Q learning.</span></p>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li class=MsoNormal style='margin-bottom:12.0pt'><b><span lang=EN
+     style='font-size:12.0pt;line-height:115%'>Central Q learning</span></b></li>
+</ol>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>In
+this we reduce multiple agents into a single agent and then learn the policy,
+it suffers from large action space. And the second limitation is that in most
+of the MARL setting there is no central unit which guides all the agents so we
+have to learn an independent policy. And also here we need a notion of scalar
+reward r instead of individual reward which environment gives.</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=624 height=299 id=image28.png src="EE675_Blog_files/image023.gif"></span></p>
+
+<ol style='margin-top:0cm' start=2 type=1>
+ <li class=MsoNormal style='margin-bottom:12.0pt'><b><span lang=EN
+     style='font-size:12.0pt;line-height:115%'>Independent Q learning</span></b></li>
+</ol>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>In
+this each of the agents work on their own using Q learning algorithms and also
+agents don’t use other agents' action and observation in deciding their own
+policy. It suffers from instability as the transition probability for an agent
+i also depend on the other agents policy as </span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=473 height=69 src="EE675_Blog_files/image024.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'>So
+for agent i this creates instability.</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=624 height=325 id=image24.png src="EE675_Blog_files/image025.gif"></span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Here is a comparison for CQl vs IQL on foraging task,
+we see IQL converge faster due to less size of action space</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN><img width=610
+height=352 id=image25.png src="EE675_Blog_files/image026.gif"></span><span
+lang=EN>\</span></p>
+
+<h2 style='margin-bottom:12.0pt'><a name="_p2qgj3glnc5"></a><b><span lang=EN>Challenges
+in MARL</span></b></h2>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Non
+     stationarity</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>As we have seen in the case of IQL that MARL suffers
+from non-stationarity and it is true even for single agent RL setting.</span></p>
+
+<ol style='margin-top:0cm' start=2 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Optimality
+     of policies</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>The optimality of policy does not guarantee the best
+reward we can get for example as we have seen even if we converge to a nash
+equilibrium it might be possibl;e that some other policy gives better reward.</span></p>
+
+<ol style='margin-top:0cm' start=3 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Equilibrium
+     Selection</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>Also we have seen that from a particular kind of
+optimality there might be multiple equilibrium possible and it is hard to
+decide on which one to converge.</span></p>
+
+<ol style='margin-top:0cm' start=4 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Credit
+     system</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>In the case of MARL, sometimes the success is due to
+the actions of multiple agents and it becomes hard to decide how to distribute
+rewards among them.</span></p>
+
+<ol style='margin-top:0cm' start=5 type=1>
+ <li class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Scaling</span></li>
+</ol>
+
+<p class=MsoNormal style='margin-left:36.0pt'><span lang=EN style='font-size:
+12.0pt;line-height:115%'>We have seen in the case of CQL that the actionspace
+increases exponentially as the number of agents increases</span><span lang=EN>.</span></p>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt'><span lang=EN>&nbsp;</span></p>
+
+<h2><b><span lang=EN>Foundational Algorithms</span></b></h2>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>We
+will look at mainly four foundational algorithms that help in dealing with the
+multi-agent RL problems:</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Joint-Action
+Learning</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Agent
+Modeling</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Policy-Based
+Learning</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Regret
+Matching</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>We
+will explore each of the above topics in some depth. However, before we start
+with this, we need to study the concept of DP which helps in forming the
+foundation of many algorithms that follow. Hence, let’s start with our study of
+the DP approach.</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<h3><a name="_u8isv6db257w"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>DP: Value Iteration</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>This
+is analogous to the classical Value Iteration algorithm that we studied for the
+MDPs in the case of single-agent RL. It forms the foundation for a family of
+temporal-difference learning algorithms. It is worth mentioning that this
+approach requires that the reward function R<sub>i</sub> for each agent, and
+the state transition function T for the game should be known. The following
+pseudocode helps in understanding the implementation of this approach:</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'> <img
+width=624 height=296 id=image17.png src="EE675_Blog_files/image027.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='font-size:12.0pt;line-height:115%'>          </span><span lang=EN
+style='font-size:9.0pt;line-height:115%'>Fig 1: Pseudocode for DP approach in
+Value iteration</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>We
+start with initializing the Value function for each state with zero (or
+randomly). We repeat two update processes for V<sub>i</sub>(s) and M<sub>i,s</sub>(a)
+respectively. Here, M<sub>i,s</sub>(a) represents the reward function for agent
+i in the normal-form game for state s (if we fix the state s). In the second
+update equation, Value(M<sub>1,s</sub>, … , M<sub>n,s</sub>) represents the
+minimax value for agent i. We perform these update steps until these values
+converge to their optimal values.</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Also,
+note that in case of a single-agent, the second update equation reduces to the
+normal Value Iteration updation step:</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'><img
+width=624 height=149 id=image8.png src="EE675_Blog_files/image028.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='font-size:9.0pt;line-height:115%'>Figure 2: DP update equation in case
+of single-agent game</span></p>
+
+<h3><a name="_tcf0hby64gj6"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>DP: Proof of Convergence</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>We
+mentioned in the previous paragraph that the values in the pseudocode of Figure
+1 will converge to their optimal values. However, this assumption is not
+trivial. Nevertheless, we can prove this assumption using a similar approach
+that we used to prove the convergence of Value Iteration in the class. We
+define the following two concepts: </span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-36.0pt;line-height:
+normal'><span lang=EN style='font-size:14.0pt;color:black'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span>&#9679;<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>Contraction Mapping: A
+mapping f: S-&gt;S defined for a || . ||-normed complete vector space S is a </span><span
+lang=EN style='font-size:12.0pt;font-family:"Cambria Math",serif'>&#8509;</span><span
+lang=EN style='font-size:12.0pt'>-contraction, for </span><span lang=EN
+style='font-size:12.0pt;font-family:"Cambria Math",serif'>&#8509;</span><span
+lang=EN style='font-size:12.0pt'> &#1013; [0,1), if for all x,y &#1013; S:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'><img width=339 height=57 id=image10.png
+src="EE675_Blog_files/image029.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>FIgure 3: Contraction Mapping</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-36.0pt;line-height:
+normal'><span lang=EN style='font-size:14.0pt;color:black'><span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span>&#9679;<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>Banach fixed-point
+theorem, if f is a contraction mapping, then for any initial vector x &#1013;
+S, the sequence f(x),f(f(x)),f(f(f(x))),... converges to a unique fixed point
+x* &#1013; S such that f(x*)=x*.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>Using the max-norm ||x||</span><sub><span lang=EN style='font-size:
+12.0pt'>&#8734;</span></sub><span lang=EN style='font-size:12.0pt'> = max<sub>i</sub>
+|x<sub>i</sub>|, it can be shown that the value update operator in our Value
+Iteration algorithm satisfies the characteristics of a contraction mapping.
+Thus, repeated application of the value update operator in the pseudocode of
+Figure 1, leads to convergence to a unique fixed point which, by definition, is
+given by V*<sub>i</sub> for all agents i &#1013; I.</span></p>
+
+<span lang=EN style='font-size:11.0pt;font-family:"Arial",sans-serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=624 height=151 id=image3.png
+src="EE675_Blog_files/image030.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Figure 4: Optimal values V*<sub>i</sub>(s) and
+M*<sub>i,s</sub>(a)</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>Thus, we have a guaranteed convergence at the end. However, as
+mentioned earlier, this approach requires access to the game model, i.e., the
+reward model R<sub>i</sub> for each agent i, and the state transition function
+for the game which not be always available. This is a major drawback of this
+basic approach. Nevertheless, this approach forms the basis of different
+Temporal differencing techniques that we shall see in the next section.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3 style='line-height:normal'><a name="_mgmtubebo7oi"></a><b><span lang=EN
+style='font-size:12.0pt;color:black'> Temporal Differencing: Joint-Action
+Learning</span></b></h3>
+
+<h3 style='line-height:normal'><a name="_ka0uf64y5ve"></a><span lang=EN
+style='font-size:12.0pt;color:black'>&nbsp;</span></h3>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>A family of MARL algorithms based on the technique of Temporal
+Differencing. Similar to the Q(s,a) values learned in the case of single-agent
+MDP environments, this technique learns the joint-action value functions that
+estimate the expected returns of joint actions in any given state. Analogous to
+the Bellman equation for MDPs, these algorithms help in learning the expected
+return for an agent i in state s, when it selects a joint action a<sub>i</sub>
+while following a policy &#960;.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>As we will soon see, JAL algorithms are off-policy algorithms which aim
+to learn equilibrium Q-values, Q<sup>&#960;</sup><sub>i</sub>* , where &#960;*
+is an equilibrium joint policy for the stochastic game. The update equation for
+the Q-values is given as follows:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=624 height=92 id=image1.png
+src="EE675_Blog_files/image031.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 5: Update equation for the state-action
+function for agent i, following a policy &#960;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>Note that this case is significantly different from the single-agent
+MDP cases since we cannot simply take argmax<sub>ai</sub>Q<sub>i</sub>(s, a<sub>1</sub>,
+a<sub>2</sub>,....,a<sub>n</sub>) for action-selection. The action-selection
+process requires additional assumptions about the other agents’ actions to
+select optimal actions and compute TD target values. Also, as we shall see
+shortly, different equilibria might yield different expected returns. </span><span
+lang=EN><br clear=all style='page-break-before:always'>
+</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>If we fix the state s, the set of joint-action values Q<sub>1</sub>(s,
+. ),...,Q<sub>n</sub>(s, . ) can be viewed as a non-repeated normal-form game </span><span
+lang=EN style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s</span></sub><span lang=EN style='font-size:
+12.0pt'> for state s, in which the reward function for agent i is given by:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'><img width=427 height=56 id=image15.png
+src="EE675_Blog_files/image032.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 6: Reward function for agent i in the
+non-repeated normal-form game obtained by fixing the state s</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>For example, given a stochastic game with two agents (say i and j), and
+three possible actions for each agent, the normal form </span><span lang=EN
+style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s</span></sub><span lang=EN style='font-size:
+12.0pt'> = {</span><span lang=EN style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s,i,</span></sub><span lang=EN
+style='font-size:12.0pt'>, </span><span lang=EN style='font-size:12.0pt;
+font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span lang=EN
+style='font-size:12.0pt'>s,j</span></sub><span lang=EN style='font-size:12.0pt'>}
+in state s can be written as:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=624 height=189 id=image12.png
+src="EE675_Blog_files/image033.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 7: Description of normal-form game
+component for agent i</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>where a<sub>i,k</sub> denotes that the agent i has performed the action
+k. Similarly, we can define </span><span lang=EN style='font-size:12.0pt;
+font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span lang=EN
+style='font-size:12.0pt'>s,j</span></sub><span lang=EN style='font-size:12.0pt'>
+for the agent j. Hence, the combination of </span><span lang=EN
+style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s,i</span></sub><span lang=EN
+style='font-size:12.0pt'> and </span><span lang=EN style='font-size:12.0pt;
+font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span lang=EN
+style='font-size:12.0pt'>s,j</span></sub><span lang=EN style='font-size:12.0pt'>
+together represents the non-repeated normal-form game </span><span lang=EN
+style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s</span></sub><span lang=EN style='font-size:
+12.0pt'>. The pseudocode for the JAL-GT algorithm is given as follows:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=625 height=281 id=image9.png
+src="EE675_Blog_files/image034.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 8: Pseudocode for JAL-GT algorithm</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>As shown in Fig 8, we first initialize the Q(s,a) values for each agent
+i, and each state-action pair (s,a). For each time step, we first observe the
+current state, and then we follow an infinite exploration strategy (such as &#1013;-greedy)
+to sample actions. With probability &#1013;, we select an action randomly,
+otherwise, we sample action by the policy obtained from solving the normal-form
+game </span><span lang=EN style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s</span></sub><span lang=EN style='font-size:
+12.0pt'> corresponding to the current state s. Next, we observe the joint
+actions for each agent, and get the joint rewards along with the next state.
+Finally, we update the Q(s,a) values for each agent.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>Solving for </span><span lang=EN style='font-size:12.0pt;font-family:
+"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span lang=EN
+style='font-size:12.0pt'>s </span></sub><span lang=EN style='font-size:12.0pt'>gives
+the equilibrium joint policy &#960;*<sub>s</sub> for a non-repeated normal form
+game, while &#960;* is the equilibrium joint policy we want to learn for the
+stochastic game. Hence, we earlier called the JAL-GT algorithm as an off-policy
+learning method since the joint policy &#960;*<sub>s </sub>obtained by solving </span><span
+lang=EN style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s </span></sub><span lang=EN style='font-size:
+12.0pt'>helps in obtaining the equilibrium joint policy &#960;* that we want to
+learn. Given &#960;*<sub>s</sub>, action-selection can now be done in state s
+by sampling the joint action a ~ &#960;*<sub>s </sub>with some random
+exploration (as shown in the pseudocode of Figure 7)</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3 style='line-height:normal'><a name="_o7xsc99ydz21"></a><b><span lang=EN
+style='font-size:12.0pt;color:black'>Methods to Solve </span></b><b><span
+lang=EN style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif;
+color:black'>&#11396;</span></b><b><sub><span lang=EN style='font-size:12.0pt;
+color:black'>s</span></sub></b></h3>
+
+<p class=MsoNormal style='line-height:normal'><sub><span lang=EN
+style='font-size:12.0pt'>There are three main methods to solve the non-repeated
+normal-form game </span></sub><span lang=EN style='font-size:12.0pt;font-family:
+"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span lang=EN
+style='font-size:12.0pt'>s that we obtained in our pseudocode in Figure 7.
+These are:</span></sub></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><sub><span lang=EN style='font-size:12.0pt'>Minimax Q-Learning</span></sub></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><sub><span lang=EN style='font-size:12.0pt'>Nash Q-Learning</span></sub></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><sub><span lang=EN style='font-size:12.0pt'>Correlated Q-Learning</span></sub></p>
+
+<p class=MsoNormal style='line-height:normal'><sub><span lang=EN
+style='font-size:12.0pt'> We will have a look at each of the three algorithms
+one-by-one.</span></sub></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<h3><a name="_p5cevjhqsw9v"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>JAL-GT: Minimax Q-Learning</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>This method solves for </span><span lang=EN style='font-size:12.0pt;
+font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span lang=EN
+style='font-size:12.0pt'>s</span></sub><sup><span lang=EN style='font-size:
+12.0pt'> </span></sup><span lang=EN style='font-size:12.0pt'>by computing a
+minimax solution. It is guaranteed to learn the unique minimax value of the
+stochastic game. We referred to the paper <i>Markov games as a framework for
+multi-agent reinforcement learning </i>(Littman, 1994) where the researchers
+created a simplified grid-world environment with two agents (as shown in Fig
+9). </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=507 height=287 id=image16.png
+src="EE675_Blog_files/image035.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 9: Simplified grid-world soccer game with
+two agents A and B</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Source: Markov games as a framework for
+multi-agent reinforcement learning (Littman, 1994)</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>The grid-world consists of two agents A and B and represents a zero-sum
+stochastic game. After training the model using two algorithms: minimax
+Q-Learning and independent Q-Learning, the researchers tested the learned
+policies against three models:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>A random model that
+chooses actions randomly uniformly</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>A hand-built deterministic
+algorithm based upon heuristics</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>An optimal opponent that
+uses Q-Learning to select optimal actions against fixed-policy agents</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>The results obtained are mentioned in the following figure:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'> <img width=591 height=216 id=image6.png
+src="EE675_Blog_files/image036.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 10: Results obtained from the grid-world
+soccer environment gameplay</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>We can see that the models perform decently against the first two
+opponents. However, in the case of the optimal (worst-case) opponent, they fail
+miserably. As we see shortly, this can be due to the fixed-policy execution by
+the minimax Q-Learning models against an optimal model which optimizes its
+actions based upon the actual actions of its opponent. </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3><a name="_t14v3i1asmom"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>JAL-GT: Nash Q-Learning</span></b></h3>
+
+<p class=MsoNormal><span lang=EN>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>This method is guaranteed to learn a Nash equilibrium of the stochastic
+game under two highly restrictive assumptions that all the encountered
+normal-games should have either a global optimum (an equilibrium where all
+agents have maximum expected return) or a saddle point (an equilibrium where if
+any agent deviates from the joint policy, all other agents receive a higher
+expected return). These are highly restrictive and impractical assumptions
+because these two are significantly stronger assumptions and might not always
+exist in most of the normal-form games.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3><a name="_5q1d6zesgw9x"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>JAL-GT: Correlated Q-Learning</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>This method solves the normal-form game </span><span lang=EN
+style='font-size:12.0pt;font-family:"Segoe UI Historic",sans-serif'>&#11396;</span><sub><span
+lang=EN style='font-size:12.0pt'>s</span></sub><span lang=EN style='font-size:
+12.0pt'> by computing a correlated equilibrium, and can be applied to
+general-sum stochastic games with a finite number of agents. It presents two
+main benefits over Nash Q-Learning:</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>A wider solution space</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>More efficient computation
+via Linear Programming (as compared to Quadratic Programming in the case of
+Nash Q-Learning)</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>A wider solution space, however, means that the equilibrium selection
+problem will now be more pronounced. We looked at the original paper on <i>Correlated
+Q-Learning </i>(2003) where the authors propose several ways to solve this
+problem. One such way is to choose an equilibrium that maximizes the sum of
+expected rewards of the agents.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>Another possible option is to select an equilibrium that maximizes the
+min/max of the agents’ expected rewards.</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3 style='line-height:normal'><a name="_6xlvq9dc33su"></a><b><span lang=EN
+style='font-size:12.0pt;color:black'>Joint-Action Learning: Limitations</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>There exist “turn-taking” stochastic games (games in which at each
+time-step, only one agent has the option to select among multiple actions, and
+other agents can select only one action) that have a unique stationary
+probabilistic equilibrium, but no stationary deterministic equilibrium. In a
+“turn-taking” stochastic game, any JAL-GT algorithm would attempt to learn a
+stationary deterministic equilibrium (joint policy). In the paper Cyclic
+Equilbria in Markov Games (Zinkevich, Greenwald, and Littman, 2005), the
+authors show the examples of what they call as the NoSDE (No Stationary
+Deterministic Equilibrium) stochastic games, in which there doesn’t exist a
+stationary deterministic equilibrium for the stochastic game. One such example
+is shown in the following figure: </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=575 height=251 id=image11.png
+src="EE675_Blog_files/image037.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 11: Example of an NoSDE (No Stationary
+Deterministic Equilibrium)</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Source: Cyclic Equilibria in Markov Games
+(Zinkevich, Greenwald, and Littman, 2005)</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>In figure 11, we have a simple stochastic game with two agents. Any
+possible deterministic policy (basically, a combination of send/keep actions
+for the two agents) will not lead to an equilibrium because one of the agents
+can always deviate from the policy to get higher expected returns. However, the
+authors show that there exists a stationary probabilistic equilibrium for this
+game that cannot be obtained using Joint-Action Learning algorithms. Hence, now
+we look at the Agent Modeling algorithms which approach the problem of solving
+stochastic games by modeling the actions of other agents and then selecting the
+best possible action. </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3 style='line-height:normal'><a name="_de6j79c4vu96"></a><b><span lang=EN
+style='font-size:12.0pt;color:black'>Agent Modeling</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>These algorithms are concerned with constructing models of other agents
+that can make useful predictions about their behaviors. This method is known as
+Policy Reconstruction, which aims to learn models of policies of other agents
+based on their observed past actions. Given a set of models of other agents’
+policies, a given agent can select a best-response policy with respect to these
+models. We will look at three variants of agent modeling algorithms which are
+mentioned as follows:</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Fictitious
+Play</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Joint
+Action Learning through Agent Modeling </span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Bayesian
+Learning and Value of Information</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<h3><a name="_mc8rfeq72c6q"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>Agent Modeling: Fictitious Play</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>Each agent i models the policy of every other agent j as a stationary
+probability distribution by taking the empirical distribution of agent j’s past
+actions: </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='font-size:12.0pt;line-height:115%'><img width=292 height=107
+id=image2.png src="EE675_Blog_files/image038.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='font-size:9.0pt;line-height:115%'>Fig 12: Update equation for
+Probability distribution of agent j taking the action a<sub>j</sub></span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>As
+shown in figure 12, the probability distribution of the agent j taking action a<sub>j</sub>
+depends on C(a<sub>j</sub>): number of times the agent j takes action a<sub>j</sub>
+before the current episode. This method is defined for non-repeated normal-form
+games only as it doesn’t take into consideration the states in which given
+action was taken by an agent. Still it has interesting convergence properties
+so that the empirical distributions converge towards a final equilibrium even
+in randomized equilibrium cases. In each episode, agent i selects the best
+response depending upon the other agents’ model estimates</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<h3><a name="_9gk0czf961gk"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>Agent Modeling: Joint-Action Learning </span></b></h3>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>These algorithms Extend the idea of agent modeling to general
+stochastic games using Joint-Action Learning. These methods learn other agents’
+empirical distributions based upon their past actions and the state in which
+those actions took place:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'><img width=322 height=98 id=image13.png
+src="EE675_Blog_files/image039.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 13: Update equation for probability
+distribution of agent j taking action a<sub>j</sub> in state s</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>As shown in Fig 13, the probability distribution update equation for
+agent j takes into consideration both the action and the state in which this
+action was taken. Here, C(s, a<sub>j</sub>) represents the number of times the
+agent j took action a<sub>j</sub> when it was present in state s. We have the
+following pseudocode for the JAL-AM algorithm:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=577 height=360 id=image5.png
+src="EE675_Blog_files/image040.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 14: Pseudocode for JAL-AM algorithm</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>As shown in Fig 14, we first initialize the Q(s,a) values and the
+probability distributions randomly. Then, we repeat for each time step a number
+of steps which include first observing the current state, and then
+action-selection. The latter is performed using an infinite exploration
+strategy (such as &#1013;-greedy) where with probability &#1013;, the action is
+selected randomly, otherwise, the best-response action is selected based upon
+the other agents’ probability distributions. After observing the joint action,
+updates are made to the probability distribution and Q(s,a) values for the
+agents. </span></p>
+
+<span lang=EN style='font-size:11.0pt;font-family:"Arial",sans-serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>The following figure presents a comparison of evaluation returns of
+three different algorithms (Independent Q-Learning, Correlated Q-Learning, and
+JAL-AM) on the famous foraging environment: </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'><img width=520 height=319 id=image7.png
+src="EE675_Blog_files/image041.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 15: Evaluation returns of IQL, CQL and
+JAL-AM on the foraging environment</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>As we can see in fig 15, The agent models learned by the JAL-AM agents
+reduced the variance in their update targets, as is reflected by the smaller
+standard deviation in evaluation returns compared to IQL and CQL. </span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<h3 style='line-height:normal'><a name="_ymdsz9lu429p"></a><b><span lang=EN
+style='font-size:12.0pt;color:black'>Agent Modeling: Bayesian Learning and
+Value of Information</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>These methods maintain the empirical distributions of other agents’
+models along with their associated likelihoods. We define a metric called Value
+of Information (VI) that evaluates how the outcomes of an action may influence
+the learning agent’s beliefs about the other agents, and how the changed
+beliefs will in turn influence the future actions of the learning agent. Based
+upon the probability distribution of other agents and their corresponding
+likelihoods, these methods compute best-response actions such that it maximizes
+the Value of Information. After observing agent j’s action a<sup>t</sup><sub>j</sub>
+in state s<sup>t</sup>, agent i updates its belief by computing a Bayesian
+posterior distribution:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'><img width=624 height=108 id=image4.png
+src="EE675_Blog_files/image042.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Fig 16: Update equation for the likelihood of
+agent j’s probability distribution model, given the history of states and
+actions till the current episode</span></p>
+
+<span lang=EN style='font-size:11.0pt;font-family:"Arial",sans-serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:12.0pt'>&nbsp;</span></p>
+
+<h2 style='line-height:normal'><a name="_xhowkmufhwrf"></a><span lang=EN
+style='font-size:15.0pt'>Future Work</span></h2>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<h3><a name="_9ifhrvgih3be"></a><b><span lang=EN style='font-size:12.0pt;
+line-height:115%;color:black'>Grid-World Soccer Environment</span></b></h3>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>Our
+first aim will be to revisit the grid-world soccer environment that we saw
+earlier in the section on Joint-Action Learning via Minimax Q-Learning. We will
+first describe the environment completely, look at the original results and
+then explain our future plan with this environment. </span></p>
+
+<p class=MsoNormal><span lang=EN style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='font-size:12.0pt;line-height:115%'><img width=362 height=205
+id=image14.png src="EE675_Blog_files/image043.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN
+style='font-size:9.0pt;line-height:115%'>Fig 17: Simplified grid-world soccer
+game with two agents A and B</span></p>
+
+<p class=MsoNormal align=center style='text-align:center;line-height:normal'><span
+lang=EN style='font-size:9.0pt'>Source: Markov games as a framework for
+multi-agent reinforcement learning (Littman, 1994)</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>The environment shown in Fig 17 represents a zero-sum stochastic game
+with two agents. It is played on a 4x5 soccer grid, starting in an initial
+state. The ball is randomly assigned to an agent and there are 5 possible
+actions for each agent at every time step: up, down, right, left, or stand
+still. Further, an agent loses the ball if it moves to a location occupied by
+another agent. An agent scores +1 reward if it moves into the opponent goal (-1
+reward for the opponent), and this marks the end of an episode. Each episode
+terminates as a draw with probability 0.1 in each time step (</span><span
+lang=EN style='font-size:12.0pt;font-family:"Cambria Math",serif'>&#8509;</span><span
+lang=EN style='font-size:12.0pt'>=0.9). After training, one of the learned
+policies from each algorithm was tested over 100,000 time steps against three
+different models:</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>A random model that
+chooses actions randomly uniformly</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>A hand-built deterministic
+algorithm based upon heuristics</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt;line-height:
+normal'><span lang=EN style='font-size:12.0pt'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt'>An optimal opponent that
+uses Q-Learning to select optimal actions against fixed-policy agents</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>We looked over the results briefly in the section on Minimax Q-Learning
+earlier, and now, we plan the following tasks as we move forward:</span></p>
+
+<p class=MsoNormal style='line-height:normal'><span lang=EN style='font-size:
+12.0pt'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Replicate
+the original paper and implement the Minimax Q-Learning algorithm for this
+soccer environment</span></p>
+
+<p class=MsoNormal style='margin-left:36.0pt;text-indent:-18.0pt'><span
+lang=EN style='font-size:12.0pt;line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Implement
+Deep Q-Networks for this soccer environment</span></p>
+
+<p class=MsoNormal style='margin-top:0cm;margin-right:0cm;margin-bottom:12.0pt;
+margin-left:36.0pt;text-indent:-18.0pt'><span lang=EN style='font-size:12.0pt;
+line-height:115%'>-<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=EN style='font-size:12.0pt;line-height:115%'>Compare
+the results of the policies learned by both the algorithms</span></p>
+
+</div>
+
+</body>
+
+</html>
